@@ -19,24 +19,44 @@ class CustomDrawer extends StatelessWidget {
             _DrawerItem(
               icon: Icons.home,
               text: "홈",
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/');
+              },
               // color: Colors.white,
               // backgroundColor: Colors.blue,
             ),
             _DrawerItem(
               icon: Icons.person,
               text: "마이",
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/mypage/profile');
+              },
+            ),
+            _DrawerItem(
+              icon: Icons.person,
+              text: "검색",
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/user/search');
+              },
             ),
             _DrawerItem(
               icon: Icons.category,
               text: "상품",
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/user/product');
+              },
             ),
             _DrawerItem(
               icon: Icons.shopping_bag,
               text: "장바구니",
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/user/cart');
+              },
             ),
           ],
         ),
@@ -44,32 +64,38 @@ class CustomDrawer extends StatelessWidget {
           color: Colors.blueAccent,
           child:
           // 로그아웃 
-          _DrawerItem(
-            icon: Icons.logout, 
-            text: "로그아웃",
-            color: Colors.white, 
-            onTap: () {},
-          ),
+          // _DrawerItem(
+          //   icon: Icons.logout, 
+          //   text: "로그아웃",
+          //   color: Colors.white, 
+          //   onTap: () {},
+          // ),
           
           // 로그인, 회원가입
-          // Row(
-          //   children: [
-          //     // 로그인
-          //     Expanded(
-          //       child: TextButton(
-          //         onPressed: () {}, 
-          //         child: Text("로그인", style: TextStyle(color: Colors.white),),
-          //       ),
-          //     ),
-          //     // 회원가입
-          //     Expanded(
-          //       child: TextButton(
-          //         onPressed: () {}, 
-          //         child: Text("회원가입", style: TextStyle(color: Colors.white),),
-          //       ),
-          //     ),
-          //   ],
-          // ),
+          Row(
+            children: [
+              // 로그인
+              Expanded(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/auth/login');
+                  }, 
+                  child: Text("로그인", style: TextStyle(color: Colors.white),),
+                ),
+              ),
+              // 회원가입
+              Expanded(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/auth/join');
+                  },
+                  child: Text("회원가입", style: TextStyle(color: Colors.white),),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -88,6 +114,7 @@ class CustomDrawer extends StatelessWidget {
       title: Text(text),
       tileColor: backgroundColor,
       textColor: color,
+      onTap: onTap,
     );
   }
 }

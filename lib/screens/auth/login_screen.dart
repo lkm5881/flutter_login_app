@@ -14,11 +14,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("홈"),
+        title: const Text("로그인"),
       ),
       body: Center(
-        child: const Text("홈 화면"),
-      ),      
+        child: const Text("로그인 화면"),
+      ),
       endDrawer: CustomDrawer(),
       bottomNavigationBar: CommonBottomNavigationBar(
         currentIndex: 0

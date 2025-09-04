@@ -14,11 +14,11 @@ class _JoinScreenState extends State<JoinScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("홈"),
+        title: const Text("회원가입"),
       ),
       body: Center(
-        child: const Text("홈 화면"),
-      ),      
+        child: const Text("회원가입 화면"),
+      ),
       endDrawer: CustomDrawer(),
       bottomNavigationBar: CommonBottomNavigationBar(
         currentIndex: 0
