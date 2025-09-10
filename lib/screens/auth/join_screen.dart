@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:login_app/service/user_service.dart';
 import 'package:login_app/widgets/custom_button.dart';
 
 class JoinScreen extends StatefulWidget {
@@ -15,6 +16,8 @@ class _JoinScreenState extends State<JoinScreen> {
   String? _confirmPassword;    // 비밀번호 확인
   String? _name;                // 이름
   String? _email;              // 이메일
+
+  UserService userService = UserService();
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +106,7 @@ class _JoinScreenState extends State<JoinScreen> {
                 ),
                 onChanged: (value) {
                   setState(() {
-                    _username = value;
+                    _name = value;
                   });
                 },
               ),
@@ -131,7 +134,27 @@ class _JoinScreenState extends State<JoinScreen> {
       bottomSheet: CustomButton(
         text: "회원가입",
         isFullWidth: true,
-        onPressed: () {}
+        onPressed: () async {
+          // 유효성 검사
+          if(!_formKey.currentState!.validate()) {
+            return;
+          }
+
+          // 회원가입 요청
+          bool result = await userService.registerUser({
+            "username": _username!,
+            "password": _password!,
+            "name": _name!,
+            "email": _email!,
+          });
+
+          if(result) {
+            print("회원 가입 성공!");
+            Navigator.pop(context);
+          } else {
+            print("회원 가입 실패!");
+          }
+        }
       ),
     );
   }
