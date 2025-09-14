@@ -47,7 +47,12 @@ class _JoinScreenState extends State<JoinScreen> {
               ),
               // 아이디
               TextFormField(
-                validator: (value) {},
+                validator: (value) {
+                  if(value == null || value.isEmpty) {
+                    return "아이디를 입력하세요";
+                  }
+                  return null;
+                },
                 decoration: const InputDecoration(
                   labelText: "아이디",
                   hintText: "아이디를 입력하세요",
