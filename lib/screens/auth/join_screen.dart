@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:login_app/notifications/snackbar.dart';
 import 'package:login_app/service/user_service.dart';
 import 'package:login_app/widgets/custom_button.dart';
 
@@ -188,9 +189,19 @@ class _JoinScreenState extends State<JoinScreen> {
 
           if(result) {
             print("회원 가입 성공!");
+            Snackbar(
+              text: "회원가입에 성공했습니다!",
+              icon: Icons.check_circle_outline,
+              backgroundColor: Colors.green,
+            ).showSnackbar(context);
             Navigator.pop(context);
           } else {
             print("회원 가입 실패!");
+            Snackbar(
+              text: "회원가입에 실패했습니다.",
+              icon: Icons.error,
+              backgroundColor: Colors.red,
+            ).showSnackbar(context);
           }
         }
       ),
