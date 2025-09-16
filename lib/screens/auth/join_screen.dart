@@ -68,7 +68,15 @@ class _JoinScreenState extends State<JoinScreen> {
               SizedBox(height: 16),
               // 비밀번호
               TextFormField(
-                validator: (value) {},
+                validator: (value) {
+                  if(value == null || value.isEmpty) {
+                    return "비밀번호를 입력하세요";
+                  }
+                  if(value.length < 6) {
+                    return "비밀번호는 6자 이상이어야 합니다";
+                  }
+                  return null;
+                },
                 decoration: const InputDecoration(
                   labelText: "비밀번호",
                   hintText: "비밀번호를 입력하세요",
@@ -85,7 +93,15 @@ class _JoinScreenState extends State<JoinScreen> {
               SizedBox(height: 16),
               // 비밀번호 확인
               TextFormField(
-                validator: (value) {},
+                validator: (value) {
+                  if(value == null || value.isEmpty) {
+                    return "비밀번호 확인을 입력하세요";
+                  }
+                  if(value != _password) {
+                    return "비밀번호가 일치하지 않습니다";
+                  }
+                  return null;
+                },
                 decoration: const InputDecoration(
                   labelText: "비밀번호 확인",
                   hintText: "비밀번호를 다시 입력하세요",
@@ -102,7 +118,12 @@ class _JoinScreenState extends State<JoinScreen> {
               SizedBox(height: 16),
               // 이름
               TextFormField(
-                validator: (value) {},
+                validator: (value) {
+                  if(value == null || value.isEmpty) {
+                    return "이름을 입력하세요";
+                  }
+                  return null;
+                },
                 decoration: const InputDecoration(
                   labelText: "이름",
                   hintText: "이름을 입력하세요",
@@ -118,7 +139,19 @@ class _JoinScreenState extends State<JoinScreen> {
               SizedBox(height: 16),
               // 이메일
               TextFormField(
-                validator: (value) {},
+                validator: (value) {
+                  if(value == null || value.isEmpty) {
+                    return "이메일을 입력하세요";
+                  }
+                  // 이메일 형식 검사
+                  String pattern =
+                      r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$';
+                  RegExp regex = RegExp(pattern);
+                  if(!regex.hasMatch(value)) {
+                    return "유효한 이메일 형식이 아닙니다";
+                  }
+                  return null;
+                },
                 decoration: const InputDecoration(
                   labelText: "이메일",
                   hintText: "이메일을 입력하세요",
