@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:login_app/provider/user_provider.dart';
 import 'package:login_app/screens/auth/join_screen.dart';
 import 'package:login_app/screens/auth/login_screen.dart';
 import 'package:login_app/screens/home_screen.dart';
@@ -6,9 +7,18 @@ import 'package:login_app/screens/mypage/profile_screen.dart';
 import 'package:login_app/screens/user/cart_screen.dart';
 import 'package:login_app/screens/user/product_screen.dart';
 import 'package:login_app/screens/user/search_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+
+  // Provider
+  // - ChangeNotifierProvider 를 사용하여 UserProvider를 전역으로 사용할 수 있도록 지정
+  ChangeNotifierProvider(
+    create: (context) => UserProvider(),
+    child: const MyApp(),
+  );
+
+  // runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
