@@ -31,7 +31,9 @@ class UserProvider extends ChangeNotifier {
 
   // 로그인 요청
   Future<void> login(String username, String password) async {
-    const url = 'http://10.0.2.2:8000/login';
+    _loginstat = false; // 로그인 여부 초기화
+    
+    const url = 'http://10.0.2.2:8080/login';
     final data = {
       'username': username,
       'password': password,
@@ -39,16 +41,18 @@ class UserProvider extends ChangeNotifier {
     try{
       final response = await _dio.post(url, data: data);
       if(response.statusCode == 200) {
-        print("로그인 성공...");
         // JWT -> SecureStorage 에 저장
         final authorization = response.headers['authorization']?.first;
 
-        if(authorization != null) {
-          final jwt = authorization.replaceFirst('Bearer ', '');
-          print("JWT: $jwt");
-          await storage.write(key: 'jwt', value: jwt);
+        if(authorization == null) {
+          print("아이디 또는 비밀번호가 일치하지 않습니다.");
+          return;
         }
-        
+        print("로그인 성공...");
+        final jwt = authorization.replaceFirst('Bearer ', '');
+        print("JWT: $jwt");
+        await storage.write(key: 'jwt', value: jwt);
+
         // 사용자 정보, 로그인 상태 -> Provider 에 업데이트
         _userInfo = User.fromMap(response.data);
         _loginstat = true;

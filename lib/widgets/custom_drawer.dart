@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:login_app/models/user.dart';
+import 'package:login_app/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: true);
+
     return Drawer(
       child: Scaffold(
         body: ListView(
           padding: EdgeInsets.zero,
           children: [
             // Drawer 헤더
-            const DrawerHeader(
+            DrawerHeader(
               decoration: BoxDecoration(color: Colors.blue),
-              child: SizedBox.expand(),
+              child: 
+                userProvider.isLogIn ? 
+                Text(userProvider.userInfo.name.toString())
+                :
+                SizedBox.shrink(),
             ),
 
             _DrawerItem(
@@ -63,14 +73,15 @@ class CustomDrawer extends StatelessWidget {
         bottomSheet: Container(
           color: Colors.blueAccent,
           child:
+          userProvider.isLogIn ?
           // 로그아웃 
-          // _DrawerItem(
-          //   icon: Icons.logout, 
-          //   text: "로그아웃",
-          //   color: Colors.white, 
-          //   onTap: () {},
-          // ),
-          
+          _DrawerItem(
+            icon: Icons.logout, 
+            text: "로그아웃",
+            color: Colors.white, 
+            onTap: () {},
+          )
+          :
           // 로그인, 회원가입
           Row(
             children: [

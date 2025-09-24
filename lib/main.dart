@@ -10,12 +10,15 @@ import 'package:login_app/screens/user/search_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-
-  // Provider
-  // - ChangeNotifierProvider 를 사용하여 UserProvider를 전역으로 사용할 수 있도록 지정
-  ChangeNotifierProvider(
-    create: (context) => UserProvider(),
-    child: const MyApp(),
+  // runApp() : Flutter 앱의 시작점을 지정하는 함수
+  // - Provider(MyApp) 을 루트 위젯으로 설정하여 앱을 실행
+  runApp(
+    // Provider
+    // - ChangeNotifierProvider 를 사용하여 UserProvider를 전역으로 사용할 수 있도록 지정
+    ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child: const MyApp(),
+    ),
   );
 
   // runApp(const MyApp());
