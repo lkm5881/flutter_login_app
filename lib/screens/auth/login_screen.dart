@@ -166,7 +166,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   final password = _passwordController.text;
 
                   // 로그인 요청
-                  await userProvider.login(username, password, rememberId: _rememberId);
+                  await userProvider.login(
+                    username, password, 
+                    rememberId: _rememberId,
+                    rememberMe: _rememberMe
+                  );
 
                   if(userProvider.isLogIn) {
                     print('로그인 성공');
