@@ -147,4 +147,26 @@ class UserProvider extends ChangeNotifier {
       }
     }
   }
+
+  // 로그아웃
+  Future<void> logout() async {
+    try{
+      // 로그아웃 처리
+      // JWT 토큰 삭제
+      await storage.delete(key: 'jwt');
+      // 사용자 정보 초기화
+      _userInfo = User();
+      // 로그인 상태 초기화
+      _loginstat = false;
+      // 아이디 저장, 자동 로그인 여부 삭제
+      storage.delete(key: 'username');
+      final prefs = await SharedPreferences.getInstance();
+      prefs.remove('auto_login');
+      print("로그아웃 성공");
+    } catch(e) {
+      print("로그아웃 실패 : $e");
+    } 
+    // 구독하고 있는 위젯에 공유
+      notifyListeners();
+  }
 }
