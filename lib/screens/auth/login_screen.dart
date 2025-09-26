@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:login_app/notifications/snackbar.dart';
 import 'package:login_app/provider/user_provider.dart';
 import 'package:login_app/widgets/common_bottom_navigation_bar.dart';
@@ -23,6 +24,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+
+  // 안전한 저장소
+  final storage = const FlutterSecureStorage();
+  String? _username;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUsername();  // 저장된 아이디 가져오기
+  }
+
+  // 저장된 아이디 가져오기 (아이디 저장 했을 때)
+  void _loadUsername() async {
+    _username = await storage.read(key: 'username');
+    if(_username != null) {
+      _usernameController.text = _username!;
+      setState(() {
+        _rememberId = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   final password = _passwordController.text;
 
                   // 로그인 요청
-                  await userProvider.login(username, password);
+                  await userProvider.login(username, password, rememberId: _rememberId);
 
                   if(userProvider.isLogIn) {
                     print('로그인 성공');

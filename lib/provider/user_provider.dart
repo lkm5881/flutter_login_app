@@ -30,7 +30,7 @@ class UserProvider extends ChangeNotifier {
   final storage = const FlutterSecureStorage();
 
   // 로그인 요청
-  Future<void> login(String username, String password) async {
+  Future<void> login(String username, String password, {bool rememberId = false}) async {
     _loginstat = false; // 로그인 여부 초기화
     
     const url = 'http://10.0.2.2:8080/login';
@@ -49,6 +49,7 @@ class UserProvider extends ChangeNotifier {
           return;
         }
         print("로그인 성공...");
+        // ########## 로그인 처리 ##########
         final jwt = authorization.replaceFirst('Bearer ', '');
         print("JWT: $jwt");
         await storage.write(key: 'jwt', value: jwt);
@@ -56,6 +57,17 @@ class UserProvider extends ChangeNotifier {
         // 사용자 정보, 로그인 상태 -> Provider 에 업데이트
         _userInfo = User.fromMap(response.data);
         _loginstat = true;
+        // ########## 로그인 처리 ##########
+
+        // 아이디 저장
+        if(rememberId) {
+          print("아이디 저장");
+          await storage.write(key: 'username', value: username);
+        }
+        else {
+          print("아이디 저장 해제");
+          await storage.delete(key: 'username');
+        }
       }
       else if(response.statusCode == 403) {
         print('아이디 또는 비밀번호가 일치하지 않습니다.');
