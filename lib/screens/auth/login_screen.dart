@@ -55,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,  // 키패드 Overflow 방지
       appBar: AppBar(
         leading: SizedBox.shrink(),
         actions: [

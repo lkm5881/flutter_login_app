@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:login_app/models/user.dart';
+import 'package:login_app/notifications/snackbar.dart';
 import 'package:login_app/provider/user_provider.dart';
 import 'package:login_app/screens/home_screen.dart';
+import 'package:login_app/service/user_service.dart';
 import 'package:login_app/widgets/common_bottom_navigation_bar.dart';
 import 'package:login_app/widgets/custom_button.dart';
 import 'package:login_app/widgets/custom_drawer.dart';
@@ -21,9 +24,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
 
-  String? _username;            // 아이디
-  String? _name;                // 이름
-  String? _email;              // 이메일
+  User? _user;
+  UserService userService = UserService();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +52,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return const HomeScreen();
     }
 
+    // 로그인 상태
+    String _username = userProvider.userInfo.username ?? '없음';
+
+    // 사용자 정보 조회 요청
+    if( _user == null ) {
+      userService.getUser(_username).then((value) {
+        print(value);
+        setState(() {
+          _user = User.fromMap(value);
+        });
+        // 텍스트 폼 필드에 출력
+        _usernameController.text = _user?.username ?? _username;
+        _nameController.text = _user?.name ?? '';
+        _emailController.text = _user?.email ?? '';
+      });
+    }
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,  // 키패드 Overflow 방지
       appBar: AppBar(
         title: const Text("마이"),
       ),
@@ -76,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 onChanged: (value) {
                   setState(() {
-                    _username = value;
+                    _user?.username = value;
                   });
                 },
               ),
@@ -93,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 onChanged: (value) {
                   setState(() {
-                    _username = value;
+                    _user?.name = value;
                   });
                 },
               ),
@@ -110,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 onChanged: (value) {
                   setState(() {
-                    _email = value;
+                    _user?.email = value;
                   });
                 },
               ),
@@ -130,7 +155,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
       bottomSheet: CustomButton(
         text: "회원 정보 수정",
         isFullWidth: true,
-        onPressed: () {}
+        onPressed: () async {
+          if(_formKey.currentState!.validate()) {
+            // 회원정보 수정 요청
+            bool result = await userService.updateUser(
+              {
+                "username": _username,
+                "name": _user!.name,
+                "email": _user!.email,
+              }
+            );
+            if(result) {
+              Snackbar(
+                text: '회원정보 수정에 성공하였습니다.',
+                icon: Icons.check_circle,
+                backgroundColor: Colors.green,
+              ).showSnackbar(context);
+
+              // provider 에 수정된 사용자 정보 업데이트
+              userProvider.userInfo = User(
+                username: _username,
+                name: _user!.name,
+                email: _user!.email,
+              );
+            }
+          }
+        }
       ),  
       endDrawer: CustomDrawer(),
       bottomNavigationBar: CommonBottomNavigationBar(

@@ -23,6 +23,7 @@ class _JoinScreenState extends State<JoinScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,  // 키패드 Overflow 방지
       appBar: AppBar(
         leading: SizedBox.shrink(),
         actions: [
