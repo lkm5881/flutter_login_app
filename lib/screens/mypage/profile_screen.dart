@@ -145,7 +145,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 isFullWidth: true,
                 backgroundColor: Colors.red,
                 onPressed: () {
-                  // TODO: 회원 탈퇴 처리
+                  showDialog(
+                    context: context, 
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("회원 탈퇴"),
+                        content: Text("정말로 탈퇴하시겠습니까?"),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text("취소"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          TextButton(
+                            child: Text("확인"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              // 회원 탈퇴 요청
+                              userService.deleteUser(_username).then((value) {
+                                if(value) {
+                                  // 회원 탈퇴 성공
+                                  // - 로그아웃 처리
+                                  userProvider.logout();
+                                  // - 홈 화면으로 이동
+                                  Navigator.pushReplacementNamed(context, '/');
+                                }
+                              });
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
               ),
             ],
